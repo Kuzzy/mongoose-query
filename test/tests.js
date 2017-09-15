@@ -36,7 +36,7 @@ let TestSchema = new mongoose.Schema({
     ed: {type: String, default: 'value'}
   }
 });
-TestSchema.plugin(Query);
+TestSchema.plugin(Query, {includeAllParams: true});
 
 const OrigTestModel = mongoose.model('originals', OrigSchema);
 const TestModel = mongoose.model('test', TestSchema);
@@ -91,34 +91,34 @@ describe('Query:basic', function() {
       p: false,
       fl: false
     };
-     assert.deepEqual(parseQuery({q: '{"a": "b"}'}),
+     assert.deepEqual(parseQuery({q: '{"a": "b"}'}, {includeAllParams: true}),
                      _.defaults({q: {a: 'b'}}, defaultResp));
-     assert.deepEqual(parseQuery({t: 'count'}),
+     assert.deepEqual(parseQuery({t: 'count'},  {includeAllParams: true}),
                      _.defaults({t: 'count'}, defaultResp));
-     assert.deepEqual(parseQuery({p: 'a'}),
+     assert.deepEqual(parseQuery({p: 'a'}, {includeAllParams: true}),
                      _.defaults({p: 'a'}, defaultResp));
-     assert.deepEqual(parseQuery({p: '["a","b"]'}),
+     assert.deepEqual(parseQuery({p: '["a","b"]'}, {includeAllParams: true}),
                      _.defaults({p: ['a','b']}, defaultResp));
-     assert.deepEqual(parseQuery({p: '{"a":"b"}'}),
+     assert.deepEqual(parseQuery({p: '{"a":"b"}'}, {includeAllParams: true}),
                      _.defaults({p: {a:"b"}}, defaultResp));
-     assert.deepEqual(parseQuery({p: 'a,b'}),
+     assert.deepEqual(parseQuery({p: 'a,b'}, {includeAllParams: true}),
                      _.defaults({p: ['a','b']}, defaultResp));
-     assert.deepEqual(parseQuery({l: '101'}),
+     assert.deepEqual(parseQuery({l: '101'},  {includeAllParams: true}),
                     _.defaults({l: 101}, defaultResp));
-    assert.deepEqual(parseQuery({limit: '101'}),
+    assert.deepEqual(parseQuery({limit: '101'}, {includeAllParams: true}),
                    _.defaults({l: 101}, defaultResp));
-     assert.deepEqual(parseQuery({skips: '101'}),
+     assert.deepEqual(parseQuery({skips: '101'},  {includeAllParams: true}),
                   _.defaults({sk: 101}, defaultResp));
-     assert.deepEqual(parseQuery({$1: 'a'}), defaultResp);
-     assert.deepEqual(parseQuery({a: '{in}a,b'}),
+     assert.deepEqual(parseQuery({$1: 'a'}, {includeAllParams: true}), defaultResp);
+     assert.deepEqual(parseQuery({a: '{in}a,b'}, {includeAllParams: true}),
                   _.defaults({q: {a: {$in: ['a','b']}}}, defaultResp));
-     assert.deepEqual(parseQuery({a: '{m}k,v'}),
+     assert.deepEqual(parseQuery({a: '{m}k,v'}, {includeAllParams: true}),
                  _.defaults({q: {a: {$elemMatch: {key: 'k', value: 'v'}}}}, defaultResp));
-     assert.deepEqual(parseQuery({a: '{empty}'}),
+     assert.deepEqual(parseQuery({a: '{empty}'},  {includeAllParams: true}),
                  _.defaults({q: {$or: [{a: ''}, {a: {$exists: false}}]}}, defaultResp));
-     assert.deepEqual(parseQuery({a: '{!empty}'}),
+     assert.deepEqual(parseQuery({a: '{!empty}'},  {includeAllParams: true}),
                  _.defaults({q: {$nor: [{a: ''}, {a: {$exists: false}}]}}, defaultResp));
-     assert.deepEqual(parseQuery({a: 'b|c|d'}),
+     assert.deepEqual(parseQuery({a: 'b|c|d'}, {includeAllParams: true}),
                  _.defaults({q: {$or: [{a: 'b'}, {a: 'c'}, {a: 'd'}]}}, defaultResp));
 
   });
